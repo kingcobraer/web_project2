@@ -131,6 +131,17 @@ const clearNewStudentData = () => {
 onMounted(getStudentScores)
 </script>
 
+<style scoped>
+table {
+  border: solid 2px;
+}
+
+td,
+th {
+  border: solid 1px;
+}
+</style>
+
 <!-- 选项式写法: -->
 <!-- <script>
 import axios from 'axios'
@@ -218,14 +229,3 @@ export default {
   }
 }
 </script> -->
-
-<style scoped>
-table {
-  border: solid 2px;
-}
-
-td,
-th {
-  border: solid 1px;
-}
-</style>
