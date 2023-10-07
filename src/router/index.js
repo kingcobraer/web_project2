@@ -4,6 +4,7 @@ import HomeView from '../views/HomeView.vue'
 import Table from '@/views/Table.vue'
 import Table2 from '@/views/Table2.vue'
 import Table3 from '@/views/Table3.vue'
+import Table4 from '@/views/Table4.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -36,6 +37,11 @@ const router = createRouter({
       path: '/table3',
       name: 'table3',
       component: Table3
+    },
+    {
+      path: '/table4',
+      name: 'table4',
+      component: Table4
     }
   ]
 })
