@@ -6,10 +6,15 @@
 
     <!-- 表单用于新增学生成绩 -->
     <form @submit.prevent="addStudentScore">
+      <!-- ## 阻止表单提交. 类似固定写法 ##
+      当表单被提交时，首先阻止表单的默认提交行为（例如页面刷新或跳转），然后调用 addStudentScore
+      方法处理表单数据。 ## 这种做法在单页面应用SPA中很常见,因为我们通常希望通过 JavaScript
+      处理表单数据，而不是通过传统的页面刷新方式。 -->
+
       <h2>新增学生成绩</h2>
       <div>
         <label for="name">姓名</label>
-        <input type="text" id="name" v-model="newStudent.name" required />
+        <input type="text" id="name" v-model="newStudent.name" required /> ## 必填
       </div>
       <div>
         <label for="english">英语成绩</label>
@@ -23,6 +28,7 @@
         <label for="chinese">语文成绩</label>
         <input type="number" id="chinese" v-model="newStudent.chinese" required />
       </div>
+
       <button type="submit">新增学生</button>
     </form>
 
@@ -127,8 +133,7 @@ const clearNewStudentData = () => {
   newStudent.value.chinese = 0
 }
 
-// 在mounted钩子中调用getStudentScores()
-onMounted(getStudentScores)
+onMounted(getStudentScores) // 在mounted钩子中调用getStudentScores()
 </script>
 
 <style scoped>

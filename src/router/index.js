@@ -3,6 +3,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import Table from '@/views/Table.vue'
 import Table2 from '@/views/Table2.vue'
+import Table3 from '@/views/Table3.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -30,6 +31,11 @@ const router = createRouter({
       path: '/table2',
       name: 'table2',
       component: Table2
+    },
+    {
+      path: '/table3',
+      name: 'table3',
+      component: Table3
     }
   ]
 })
