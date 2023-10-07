@@ -3,6 +3,14 @@
 <template>
   <div><h1>这是table3, 用于学习数据库的查询</h1></div>
 
+  <el-input v-model="searchTerm" placeholder="Please input" @input="searchStudents" />
+  <!--  -->
+  <br />
+  <br />
+  <h4>这是你刚刚输入的内容:</h4>
+  <h1>{{ searchTerm }}</h1>
+  <br /><br /><br /><br />
+
   <table>
     <thead>
       <tr>
@@ -28,12 +36,15 @@
 import { ref, onMounted } from 'vue'
 import axios from 'axios'
 
+const searchTerm = ref('')
+
 const students = ref([])
 
-const getStudentScores = () => {
-  console.log('成功进入了函数getStudentScores中')
+const searchStudents = () => {
+  console.log('成功进入了函数searchStudents中')
   axios
-    .get('/api/getStudentScores')
+    .get('/api/getStudentScoresSearchName', { params: { search: searchTerm.value } }) // 将搜索词作为查询参数传递})
+
     .then((response) => {
       console.log(response.data)
       students.value = response.data
@@ -44,7 +55,7 @@ const getStudentScores = () => {
   console.log('成功退出了函数getStudentScores')
 }
 
-onMounted(getStudentScores) // 在mounted钩子中调用getStudentScores()
+onMounted(searchStudents) // 在mounted钩子中调用getStudentScores()
 </script>
 
 <style scoped></style>

@@ -25,6 +25,17 @@ def get_all_student_scores():
     conn.close()
     return results
 
+def get_customer_search_name(searchTerm):
+    db_path =get_db_path()
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM students WHERE name like ?", ('%' + searchTerm + '%',))   ## 注意最后一个逗号!!
+    results = cursor.fetchall()
+    # print(results)
+    conn.close()
+    return results
+
+
 def add_student_score(name, english, math, chinese):
     db_path =get_db_path()
     conn = sqlite3.connect(db_path)
@@ -54,6 +65,21 @@ def delete_student_score(name):
 @app.route('/api/getStudentScores', methods=['GET'])
 def api_get_student_scores():
     results = get_all_student_scores()
+    students = []
+    for result in results:
+        students.append({
+            'name': result[1],
+            'english': result[2],
+            'math': result[3],
+            'chinese': result[4]
+        })
+    return jsonify(students)
+
+@app.route('/api/getStudentScoresSearchName', methods=['GET'])
+def api_get_customer_search_name():
+    # 获取请求参数
+    searchTerm = request.args.get('search','')
+    results = get_customer_search_name(searchTerm)
     students = []
     for result in results:
         students.append({
