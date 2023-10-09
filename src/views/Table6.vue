@@ -1,5 +1,5 @@
 <template>
-  <h1>增加了按钮</h1>
+  <h1>增加了按钮, 实现了删除功能, 实现了弹窗方式更新数据.</h1>
   <br /><br />
   <div class="mt-4">
     <el-input
@@ -50,7 +50,7 @@
 
     <el-table-column label="Operations" width="280">
       <template #default="scope">
-        <el-button size="small" @click="dialogFormVisible = true">Edit</el-button>
+        <el-button size="small" @click="editRow(scope.row)">Edit</el-button>
         <el-button size="small" type="danger" @click="handleDelete(scope.row.name)"
           >Delete</el-button
         >
@@ -58,22 +58,25 @@
     </el-table-column>
   </el-table>
 
-  <el-dialog v-model="dialogFormVisible" title="Shipping address">
-    <el-form :model="form">
-      <el-form-item label="Promotion name" label-width="140px">
-        <el-input v-model="form.name" autocomplete="off" />
+  <el-dialog v-model="dialogFormVisible" title="Edit Student Data">
+    <el-form :model="editForm">
+      <el-form-item label="Name" label-width="140px">
+        <el-input v-model="editForm.name" autocomplete="off" />
       </el-form-item>
-      <el-form-item label="Zones" label-width="140px">
-        <el-select v-model="form.region" placeholder="Please select a zone">
-          <el-option label="Zone No.1" value="shanghai" />
-          <el-option label="Zone No.2" value="beijing" />
-        </el-select>
+      <el-form-item label="English Score" label-width="140px">
+        <el-input v-model="editForm.english" autocomplete="off" />
+      </el-form-item>
+      <el-form-item label="Math Score" label-width="140px">
+        <el-input v-model="editForm.math" autocomplete="off" />
+      </el-form-item>
+      <el-form-item label="Chinese Score" label-width="140px">
+        <el-input v-model="editForm.chinese" autocomplete="off" />
       </el-form-item>
     </el-form>
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="dialogFormVisible = false">Cancel</el-button>
-        <el-button type="primary" @click="dialogFormVisible = false"> Confirm </el-button>
+        <el-button type="primary" @click="saveEditedData"> Save </el-button>
       </span>
     </template>
   </el-dialog>
@@ -117,16 +120,43 @@ const handleDelete = (name) => {
 }
 
 const dialogFormVisible = ref(false)
-const form = reactive({
+// Create a reactive object for editing student data
+const editForm = reactive({
   name: '',
-  region: '',
-  date1: '',
-  date2: '',
-  delivery: false,
-  type: [],
-  resource: '',
-  desc: ''
+  english: '',
+  math: '',
+  chinese: ''
 })
+
+const editRow = (rowData) => {
+  // Populate the editForm with the data of the selected row
+  editForm.name = rowData.name
+  editForm.english = rowData.english
+  editForm.math = rowData.math
+  editForm.chinese = rowData.chinese
+
+  // Show the edit dialog
+  dialogFormVisible.value = true
+}
+
+const saveEditedData = () => {
+  // Send the edited data to the server (you can modify this part)
+  const name = editForm.name
+  const english = editForm.english
+  const math = editForm.math
+  const chinese = editForm.chinese
+  axios
+    .put('/api/updateStudentScore', { name, english, math, chinese }) // Use the appropriate endpoint for updating data
+    .then((response) => {
+      console.log(response.data)
+      // Optionally, refresh the student data after editing
+      searchStudentsMulti()
+      dialogFormVisible.value = false // Close the dialog after saving
+    })
+    .catch((error) => {
+      console.error(error)
+    })
+}
 
 onMounted(searchStudentsMulti) // 在mounted钩子中调用getStudentScores()
 </script>
