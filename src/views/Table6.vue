@@ -51,6 +51,8 @@
     <el-table-column label="Operations" width="280">
       <template #default="scope">
         <el-button size="small" @click="editRow(scope.row)">Edit</el-button>
+        <!-- scope即为表格的当前行. 将当前行数据传入函数editRow,并执行函数中的动作 -->
+
         <el-button size="small" type="danger" @click="handleDelete(scope.row.name)"
           >Delete</el-button
         >
@@ -59,9 +61,12 @@
   </el-table>
 
   <el-dialog v-model="dialogFormVisible" title="Edit Student Data">
+    <!-- v-model 双向动态绑定 -->
     <el-form :model="editForm">
+      <!-- 用:说明表格 editForm是一个变量, :是实现单向数据绑定的一种便捷方式,这里只能从外部获取数据然后写入表格中,而传不出去. 要传出去, 则要靠下面的v-model.-->
       <el-form-item label="Name" label-width="140px">
         <el-input v-model="editForm.name" autocomplete="off" />
+        <!-- 注意这个时候用的是v-model双向绑定,直接将数据写入了虚拟表editForm中 -->
       </el-form-item>
       <el-form-item label="English Score" label-width="140px">
         <el-input v-model="editForm.english" autocomplete="off" />
@@ -120,7 +125,7 @@ const handleDelete = (name) => {
 }
 
 const dialogFormVisible = ref(false)
-// Create a reactive object for editing student data
+// Create a reactive object for editing student data //ref和reactive功能类似, ref适用于简单数据和对象, reactive适用于复杂数据和对象
 const editForm = reactive({
   name: '',
   english: '',
@@ -129,7 +134,7 @@ const editForm = reactive({
 })
 
 const editRow = (rowData) => {
-  // Populate the editForm with the data of the selected row
+  // Populate the editForm with the data of the selected row 将当前中的数据传入了本函数. 并进一步将数据 存入 editForm 这个虚拟的表/变量 中.
   editForm.name = rowData.name
   editForm.english = rowData.english
   editForm.math = rowData.math
