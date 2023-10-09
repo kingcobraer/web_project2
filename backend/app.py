@@ -35,6 +35,31 @@ def get_customer_search_name(searchTerm):
     conn.close()
     return results
 
+def get_customer_search_multi(col,content):
+    print(f"已进入方法:get_customer_search_multi,且获得了参数:col:{col}; content:{content}")
+    db_path =get_db_path()
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+    #
+    # 下面3种方法均可
+    #
+    # 方法1:
+    # sql = f"SELECT * FROM students WHERE {col} like ?"  ## # 构建SQL查询语句，将字段名通过f字符串{}嵌入到SQL字符串中. 注意字段名不可用?进行占位!!! 搜索内容可以用? 进行占位
+    # cursor.execute(sql, ('%' + content + '%',))   ## 参数化查询方法. 注意最后一个逗号!! 搜索内容可以用? 进行占位
+    # 
+    # 方法1变形:
+    # cursor.execute(f"SELECT * FROM students WHERE {col} like ?", ('%' + content + '%',))   ## 注意最后一个逗号!! 
+    #
+    # 方法2:
+    sql = f"SELECT * FROM students WHERE {col} like '%{content}%'"
+    print(sql)
+    cursor.execute(sql)    # 使用字符串拼接构建SQL查询语句，确保输入内容不会引发SQL注入. 更安全的是参数化查询方法.
+
+    #
+    results = cursor.fetchall()
+    
+    conn.close()
+    return results
 
 def add_student_score(name, english, math, chinese):
     db_path =get_db_path()
@@ -80,6 +105,25 @@ def api_get_customer_search_name():
     # 获取请求参数
     searchTerm = request.args.get('search','')
     results = get_customer_search_name(searchTerm)
+    students = []
+    for result in results:
+        students.append({
+            'name': result[1],
+            'english': result[2],
+            'math': result[3],
+            'chinese': result[4]
+        })
+    return jsonify(students)
+
+@app.route('/api/getStudentScoresSearchMulti', methods=['GET'])
+def api_get_customer_search_multi():
+    # 获取请求 多个 搜索参数 !!!
+    content = request.args.get('search[content]')    # 注意与单参数相比, 少了一个逗号
+    col = request.args.get('search[col]')    # 注意与单参数相比, 少了一个逗号
+    if col == '':
+        col = 'name'
+    print(f"已进入函数:api_get_customer_search_multi, 且获得了参数:col:{col};content:{content}")
+    results = get_customer_search_multi(col,content)
     students = []
     for result in results:
         students.append({

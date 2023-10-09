@@ -11,6 +11,7 @@ import { RouterLink, RouterView } from 'vue-router'
       <RouterLink to="/table2">Table2</RouterLink>
       <RouterLink to="/table3">Table3</RouterLink>
       <RouterLink to="/table4">Table4</RouterLink>
+      <RouterLink to="/table5">Table5</RouterLink>
     </nav>
 
     <RouterView />
