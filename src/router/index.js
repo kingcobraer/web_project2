@@ -6,6 +6,7 @@ import Table2 from '@/views/Table2.vue'
 import Table3 from '@/views/Table3.vue'
 import Table4 from '@/views/Table4.vue'
 import Table5 from '@/views/Table5.vue'
+import Table6 from '@/views/Table6.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -48,6 +49,11 @@ const router = createRouter({
       path: '/table5',
       name: 'table5',
       component: Table5
+    },
+    {
+      path: '/table6',
+      name: 'table6',
+      component: Table6
     }
   ]
 })
